@@ -1,10 +1,6 @@
-import random
 import pygame
 import Player
 import Fish
-
-
-
 
 def play_game(running):
     pygame.init()
@@ -86,10 +82,13 @@ def game_over(score):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             play_game(True)
-    font = pygame.font.Font(None, 36)
-    text_color = (255, 255, 255)
-    score_text = font.render(f"score: {score}", True, text_color)
-    score_rect = score_text.get_rect()
-    score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
-    pygame.display.flip()
+        font = pygame.font.Font(None, 36)
+        text_color = (255, 255, 255)
+        score_text = font.render(f"Press SPACE on the keyboard to rest", True, text_color)
+        score_rect = score_text.get_rect()
+        score_rect.topleft = ((WIDTH - score_rect.width) // 2, HEIGHT // 2)
+        clock = pygame.time.Clock()
+        screen.blit(score_text, score_rect)
+        clock.tick(FPS)
+        pygame.display.flip()
 play_game(True)
