@@ -1,50 +1,40 @@
 import pygame
 import random
 
-Fish_SIZE = 30
-Fish_SPEED = 3
-
-class Fish(pygame.sprite.Sprite):
-    def __init__(self, x, y, image_path):
+class fish(pygame.sprite.Sprite):
+    def __init__(self, WIDTH, HEIGHT):
         super().__init__()
-        self.image = pygame.image.load(image_path).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (Fish_SIZE, Fish_SIZE))
-        self.image.set_colorkey((255, 255, 255))
+        Rrandomcolor = random.randint(0, 255)
+        Grandomcolor = random.randint(0, 255)
+        tint_color = (Rrandomcolor, Grandomcolor, 0, 255)
+        self.x = random.choice((5, WIDTH))
+        self.y = random.randint(0, HEIGHT)
+        self.size = random.random() * 200
+        self.WIDTH = WIDTH
+        self.HEIGHT = HEIGHT
+        self.speed = random.randint(1, 5)
+        if self.x == 5:
+            self.direction = 1
+        else:
+            self.direction = -1
+        if self.direction == 1:
+            self.image = pygame.image.load("my fish right.png").convert_alpha()
+        else:
+            self.image = pygame.image.load("my fish left.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        colored_image = self.image.copy()
+        tint_surface = pygame.Surface(colored_image.get_size(), pygame.SRCALPHA)
+        tint_surface.fill(tint_color)
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.direction = random.choice([[-1, 0], [1, 0]])
+        self.rect.topleft = (self.x, self.y)
+        self.image.set_colorkey((255, 255, 255))
+        colored_image.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
+        self.image = colored_image
 
-    def update(self, player, Fish_bullets, WIDTH, HEIGHT):
+    def update(self):
+        self.x += self.speed * self.direction
+        self.rect.topleft = (self.x, self.y)
 
-
-        """if new_x <= 0:
-            self.time_from_last_move = 0
-            self.direction = random.choice([[1, 0], [0, 1], [0, -1]])
-        elif new_x > WIDTH - ALIEN_SIZE:
-            new_x = WIDTH - ALIEN_SIZE
-            self.direction = random.choice([[-1, 0], [0, 1], [0, -1]])
-        if new_y <= 0:
-            self.time_from_last_move = 0
-            self.direction = random.choice([[-1, 0], [1, 0], [0, 1]])
-        elif new_y > HEIGHT - ALIEN_SIZE:
-            new_y = HEIGHT - ALIEN_SIZE
-            self.direction = random.choice([[-1, 0], [1, 0], [0, -1]])
-
-        self.rect.x = new_x
-        self.rect.y = new_y
-
-        if self.fire_timer >= self.fire_rate:
-            bullet_x, bullet_y = (
-                self.rect.x + ALIEN_SIZE // 2,
-                self.rect.y + ALIEN_SIZE // 2,
-            )
-            alien_bullets.append(((bullet_x, bullet_y), self.direction))
-            self.fire_timer = 0"""
-
-
-
-    def infect(self):
-        self.infected = True
-
-    def is_infected(self):
-        return self.infected
+    def isdisappear(self):
+        if self.x < 0 or self.x > self.WIDTH:
+            return True
