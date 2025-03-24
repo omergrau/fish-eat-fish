@@ -18,9 +18,9 @@ class fish(pygame.sprite.Sprite):
         else:
             self.direction = -1
         if self.direction == 1:
-            self.image = pygame.image.load("my fish right.png").convert_alpha()
+            self.image = pygame.image.load("extras\my fish right.png").convert_alpha()
         else:
-            self.image = pygame.image.load("my fish left.png").convert_alpha()
+            self.image = pygame.image.load("extras\my fish left.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         colored_image = self.image.copy()
         tint_surface = pygame.Surface(colored_image.get_size(), pygame.SRCALPHA)

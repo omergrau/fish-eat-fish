@@ -1,13 +1,13 @@
 import pygame
-import Player
-import Fish
+from extras import Player, Fish
+
 
 def play_game(running):
     pygame.init()
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    screen.blit(pygame.image.load("deepocean.png").convert(), (0, 0))
+    screen.blit(pygame.image.load("extras/deepocean.png").convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
 
     WHITE = (255, 255, 255)
@@ -50,7 +50,7 @@ def play_game(running):
                     running = False
                     game_over(player1.score)
 
-        screen.blit(pygame.image.load("deepocean.png").convert(), (0, 0))
+        screen.blit(pygame.image.load("extras/deepocean.png").convert(), (0, 0))
         players = pygame.sprite.Group()
         players.add(player1)
         players.draw(screen)
@@ -69,7 +69,7 @@ def game_over(score):
     HEIGHT = 736
     FPS = 60
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    screen.blit(pygame.image.load("deepocean.png").convert(), (0, 0))
+    screen.blit(pygame.image.load("extras/deepocean.png").convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = True
     while running:
