@@ -14,7 +14,7 @@ def play_game(running):
     BLACK = (0, 0, 0)
     running = running
     clock = pygame.time.Clock()
-    FPS = 60
+    FPS = 50
 
     fishlist = pygame.sprite.Group()
     for _ in range(10):
