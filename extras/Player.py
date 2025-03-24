@@ -1,5 +1,14 @@
 import pygame
+import os
+import sys
 
+def load_resource(filename):
+    """Helper function to load resources."""
+    if hasattr(sys, '_MEIPASS'):
+        path = os.path.join(sys._MEIPASS, 'extras', filename)
+    else:
+        path = os.path.join(os.path.dirname(__file__), filename)
+    return pygame.image.load(path)
 
 class player(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
@@ -12,7 +21,7 @@ class player(pygame.sprite.Sprite):
         self.accelartionx = 0
         self.accelartiony = 0
         self.size = 50
-        self.image = pygame.image.load("extras\my fish right.png").convert_alpha()
+        self.image = load_resource("extras\my fish right.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
@@ -49,7 +58,7 @@ class player(pygame.sprite.Sprite):
                     self.dellay = pygame.time.get_ticks()
                     self.accelartionx -= self.speed
             self.x += self.accelartionx
-            self.image = pygame.image.load("extras\my fish left.png").convert_alpha()
+            self.image = load_resource("extras\my fish left.png").convert_alpha()
             self.image = pygame.transform.scale(self.image, (self.size, self.size))
         if keys[pygame.K_RIGHT]:
             self.lastmove = pygame.time.get_ticks()
@@ -59,7 +68,7 @@ class player(pygame.sprite.Sprite):
                     self.dellay = pygame.time.get_ticks()
                     self.accelartionx += self.speed
             self.x += self.speed
-            self.image = pygame.image.load("extras\my fish right.png").convert_alpha()
+            self.image = load_resource("extras\my fish right.png").convert_alpha()
             self.image = pygame.transform.scale(self.image, (self.size, self.size))
         if keys[pygame.K_UP]:
             self.lastmove = pygame.time.get_ticks()
