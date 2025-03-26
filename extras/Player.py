@@ -8,7 +8,12 @@ def load_resource(filename):
         path = os.path.join(sys._MEIPASS, 'extras', filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
-    return pygame.image.load(path)
+    try:
+        return pygame.image.load(path)
+    except FileNotFoundError as message:
+        path = os.path.join(sys._MEIPASS, 'extras', filename)
+        return pygame.image.load(path)
+
 
 class player(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
@@ -21,10 +26,16 @@ class player(pygame.sprite.Sprite):
         self.accelartionx = 0
         self.accelartiony = 0
         self.size = 50
-        self.image = load_resource("my fish right.png").convert_alpha()
-        self.rect = self.image.get_rect()
-        self.image = pygame.transform.scale(self.image, (self.size, self.size))
-        self.mask = pygame.mask.from_surface(self.image)
+        image_right = load_resource("my fish right.png").convert_alpha()
+        self.rect = image_right.get_rect()
+        image_right = pygame.transform.scale(image_right, (self.size, self.size))
+        self.mask = pygame.mask.from_surface(image_right)
+        image_left = load_resource("my fish left.png").convert_alpha()
+        self.rect = image_left.get_rect()
+        image_left = pygame.transform.scale(image_left, (self.size, self.size))
+        self.mask = pygame.mask.from_surface(image_left)
+        self.images = (image_right,image_left)
+        self.image = image_right
         self.dellay = pygame.time.get_ticks()
         self.lastmove = pygame.time.get_ticks()
 
@@ -47,7 +58,6 @@ class player(pygame.sprite.Sprite):
         self.y += self.accelartiony
         self.rect.topleft = (self.x + self.accelartionx, self.y + self.accelartiony)
         self.mask = pygame.mask.from_surface(self.image)
-        print(self.accelartionx, self.accelartiony)
 
     def move(self, keys):
         if keys[pygame.K_LEFT]:
@@ -63,7 +73,6 @@ class player(pygame.sprite.Sprite):
         if keys[pygame.K_RIGHT]:
             self.lastmove = pygame.time.get_ticks()
             if abs(self.accelartionx) < 5:
-                print(self.accelartionx)
                 if pygame.time.get_ticks() - self.dellay > 15:
                     self.dellay = pygame.time.get_ticks()
                     self.accelartionx += self.speed
@@ -73,7 +82,6 @@ class player(pygame.sprite.Sprite):
         if keys[pygame.K_UP]:
             self.lastmove = pygame.time.get_ticks()
             if abs(self.accelartiony) < 5:
-                print(self.accelartiony)
                 if pygame.time.get_ticks() - self.dellay > 15:
                     self.dellay = pygame.time.get_ticks()
                     self.accelartiony -= self.speed
@@ -81,7 +89,6 @@ class player(pygame.sprite.Sprite):
         if keys[pygame.K_DOWN]:
             self.lastmove = pygame.time.get_ticks()
             if abs(self.accelartiony) < 5:
-                print(self.accelartiony)
                 if pygame.time.get_ticks() - self.dellay > 15:
                     self.dellay = pygame.time.get_ticks()
                     self.accelartiony += self.speed

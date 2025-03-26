@@ -1,22 +1,31 @@
 import pygame
-from extras import Player, Fish
+from extras import Player, Fish,level_2
 import os
 import sys
-
 def load_resource(filename):
     """Helper function to load resources."""
     if hasattr(sys, '_MEIPASS'):
-        path = os.path.join(sys._MEIPASS, 'extras', filename)
+        path = os.path.join(sys._MEIPASS, filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
     return pygame.image.load(path)
 
-def play_game(running):
+def level_up(level,player):
+    images=[("extras\my fish right.png","extras\my fish left.png"),("extras\level_2.PNG","extras\level_2.PNG")]
+    if player.score == 2:
+        level+=1
+        player.image = load_resource(images[level][0]).convert_alpha()
+        player.image = pygame.transform.scale(player.image, (player.size, player.size))
+        player.mask = pygame.mask.from_surface(player.image)
+        player.score = 0
+
+def play_game(running,level0):
+
     pygame.init()
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    screen.blit(load_resource("extras/ocean.png").convert(), (0, 0))
+    screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
 
     WHITE = (255, 255, 255)
@@ -43,6 +52,7 @@ def play_game(running):
         player1.move(keys)
 
         player1.update()
+        level_up(level0,player1)
         for fish_i in fishlist:
             if fish_i.isdisappear():
                 fishlist.remove(fish_i)
@@ -59,7 +69,7 @@ def play_game(running):
                     running = False
                     game_over(player1.score)
 
-        screen.blit(load_resource("extras/ocean.png").convert(), (0, 0))
+        screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
         players = pygame.sprite.Group()
         players.add(player1)
         players.draw(screen)
@@ -78,9 +88,9 @@ def game_over(score):
     HEIGHT = 736
     FPS = 60
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    screen.blit(load_resource("extras/ocean.png").convert(), (0, 0))
+    screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
-    running = True
+    running = True;
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -90,14 +100,14 @@ def game_over(score):
                     running = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            play_game(True)
+            play_game(True,0)
         font = pygame.font.Font(None, 36)
         text_color = (255, 255, 255)
-        score_text = font.render(f"Press SPACE on the keyboard to rest", True, text_color)
+        score_text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
         score_rect = score_text.get_rect()
         score_rect.topleft = ((WIDTH - score_rect.width) // 2, HEIGHT // 2)
         clock = pygame.time.Clock()
         screen.blit(score_text, score_rect)
         clock.tick(FPS)
         pygame.display.flip()
-play_game(True)
+play_game(True,0)
