@@ -11,7 +11,7 @@ def load_resource(filename):
     return pygame.image.load(path)
 
 def level_up(player):
-    if player.score == 2:
+    if player.score == 50:
         player.level_up()
 
 
@@ -76,7 +76,7 @@ def play_game(running,level0):
         clock.tick(FPS)
         fishlist.draw(screen)
 
-        score_text = font.render(f"score: {player1.score}", True, text_color)
+        score_text = font.render(f"score: {player1.score} level: {player1.level}", True, text_color)
         score_rect = score_text.get_rect()
         score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
         screen.blit(score_text, score_rect)

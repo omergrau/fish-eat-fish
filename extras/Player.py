@@ -58,7 +58,8 @@ class player(pygame.sprite.Sprite):
     def level_up(self):
         self.level += 1
         self.score=0
-
+        if len(self.picturs) == self.level:
+            self.level-=1
         image_left = load_resource(self.picturs[self.level][1]).convert_alpha()
         self.rect = image_left.get_rect()
 
