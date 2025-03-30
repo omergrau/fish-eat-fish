@@ -10,14 +10,11 @@ def load_resource(filename):
         path = os.path.join(os.path.dirname(__file__), filename)
     return pygame.image.load(path)
 
-def level_up(level,player):
-    images=[("extras\my fish right.png","extras\my fish left.png"),("extras\level_2.PNG","extras\level_2.PNG")]
+def level_up(player):
     if player.score == 2:
-        level+=1
-        player.image = load_resource(images[level][0]).convert_alpha()
-        player.image = pygame.transform.scale(player.image, (player.size, player.size))
-        player.mask = pygame.mask.from_surface(player.image)
-        player.score = 0
+        player.level_up()
+
+
 
 def play_game(running,level0):
 
@@ -36,7 +33,7 @@ def play_game(running,level0):
 
     fishlist = pygame.sprite.Group()
     for _ in range(10):
-        fishlist.add(Fish.fish(WIDTH, HEIGHT))
+        fishlist.add(Fish.fish(WIDTH, HEIGHT,0))
     player1 = Player.player(WIDTH, HEIGHT)
     font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
@@ -52,11 +49,14 @@ def play_game(running,level0):
         player1.move(keys)
 
         player1.update()
-        level_up(level0,player1)
+        level_up(player1)
         for fish_i in fishlist:
+            if player1.level != fish_i.level:
+                print(player1.level,fish_i.level)
+                fish_i.level=player1.level
             if fish_i.isdisappear():
                 fishlist.remove(fish_i)
-                fishlist.add(Fish.fish(WIDTH, HEIGHT))
+                fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
             else:
                 fish_i.update()
             if pygame.sprite.collide_mask(player1, fish_i):
@@ -64,7 +64,7 @@ def play_game(running,level0):
                     player1.score += 1
                     fishlist.remove(fish_i)
                     player1.size += fish_i.size // 20
-                    fishlist.add(Fish.fish(WIDTH, HEIGHT))
+                    fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
                 else:
                     running = False
                     game_over(player1.score)
