@@ -81,7 +81,7 @@ class player(pygame.sprite.Sprite):
                 if pygame.time.get_ticks() - self.dellay > 15:
                     self.dellay = pygame.time.get_ticks()
                     self.accelartionx -= self.speed
-            self.x += self.accelartionx
+            self.x += self.speed
             self.image= self.images[0]
         if keys[pygame.K_RIGHT]:
             self.lastmove = pygame.time.get_ticks()
