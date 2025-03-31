@@ -32,7 +32,6 @@ class player(pygame.sprite.Sprite):
         self.lastmove = pygame.time.get_ticks()
         self.level_up()
         self.image = self.images[1]
-        print(self.image.get_size())
 
 
     def update(self):
