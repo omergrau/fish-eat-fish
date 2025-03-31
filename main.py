@@ -16,7 +16,7 @@ def level_up(player):
 
 
 
-def play_game(running,level0):
+def play_game(running):
 
     pygame.init()
     WIDTH = 982
@@ -99,7 +99,7 @@ def game_over(score):
                     running = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            play_game(True,0)
+            play_game(True)
         font = pygame.font.Font(None, 36)
         text_color = (255, 255, 255)
         score_text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
@@ -109,4 +109,4 @@ def game_over(score):
         screen.blit(score_text, score_rect)
         clock.tick(FPS)
         pygame.display.flip()
-play_game(True,0)
+play_game(True)
