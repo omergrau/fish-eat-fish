@@ -61,9 +61,8 @@ def play_game(running,level0):
                 fish_i.update()
             if pygame.sprite.collide_mask(player1, fish_i):
                 if player1.size > fish_i.size:
-                    player1.score += 1
+                    player1.eatting(fish_i.size)
                     fishlist.remove(fish_i)
-                    player1.size += fish_i.size // 20
                     fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
                 else:
                     running = False

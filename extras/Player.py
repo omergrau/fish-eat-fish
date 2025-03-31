@@ -32,6 +32,7 @@ class player(pygame.sprite.Sprite):
         self.lastmove = pygame.time.get_ticks()
         self.level_up()
         self.image = self.images[1]
+        print(self.image.get_size())
 
 
     def update(self):
@@ -54,6 +55,12 @@ class player(pygame.sprite.Sprite):
         self.rect.topleft = (self.x + self.accelartionx, self.y + self.accelartiony)
         self.mask = pygame.mask.from_surface(self.image)
         self.check_borders()
+
+    def eatting(self,size):
+        self.score += 1
+        self.size += size // 20
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        self.mask = pygame.mask.from_surface(self.image)
 
     def level_up(self):
         self.level += 1
@@ -82,7 +89,8 @@ class player(pygame.sprite.Sprite):
                     self.dellay = pygame.time.get_ticks()
                     self.accelartionx -= self.speed
             self.x += self.speed
-            self.image= self.images[0]
+            self.image = pygame.transform.scale(self.images[0], (self.size, self.size))
+            self.mask = pygame.mask.from_surface(self.image)
         if keys[pygame.K_RIGHT]:
             self.lastmove = pygame.time.get_ticks()
             self.image = self.images[1]
@@ -91,7 +99,8 @@ class player(pygame.sprite.Sprite):
                     self.dellay = pygame.time.get_ticks()
                     self.accelartionx += self.speed
             self.x += self.speed
-            self.image = self.images[1]
+            self.image = pygame.transform.scale(self.images[1], (self.size, self.size))
+            self.mask = pygame.mask.from_surface(self.image)
         if keys[pygame.K_UP]:
             self.lastmove = pygame.time.get_ticks()
             if abs(self.accelartiony) < 5:
