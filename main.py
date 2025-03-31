@@ -100,6 +100,7 @@ def game_over(score):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             play_game(True)
+        pygame.font.init()
         font = pygame.font.Font(None, 36)
         text_color = (255, 255, 255)
         score_text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
