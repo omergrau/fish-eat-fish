@@ -20,6 +20,9 @@ def play_game(running):
 
     pygame.init()
     pygame.mixer.init()
+    pygame.mixer.music.load("extras/game-music-loop-6-144641.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
@@ -84,6 +87,9 @@ def play_game(running):
 
     pygame.quit()
 def game_over(score):
+    pygame.mixer.music.load("extras/lose_video-game.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play()
     WIDTH = 982
     HEIGHT = 736
     FPS = 60
