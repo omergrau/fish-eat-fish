@@ -34,6 +34,7 @@ class player(pygame.sprite.Sprite):
         self.image = self.images[1]
 
 
+
     def update(self):
         if pygame.time.get_ticks() - self.dellay > 5:
             if self.accelartiony > 0:
@@ -60,6 +61,7 @@ class player(pygame.sprite.Sprite):
         self.size += size // 20
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
+        pygame.mixer.music.load("plastic-crunch-83779.mp3")
 
     def level_up(self):
         self.level += 1

@@ -19,6 +19,7 @@ def level_up(player):
 def play_game(running):
 
     pygame.init()
+    pygame.mixer.init()
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
