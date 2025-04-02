@@ -1,5 +1,5 @@
 import pygame
-from extras import Player, Fish,level_2
+from extras import Player, Fish
 import os
 import sys
 def load_resource(filename):
@@ -22,8 +22,8 @@ def toggle_fullscreen(fullscreen):
     return screen
 
 def load_high_score():
-    if os.path.exists("extras\highscore.txt"):
-        with open("extras\highscore.txt", "r") as f:
+    if os.path.exists(load_resource("extras\highscore.txt")):
+        with open(load_resource("extras\highscore.txt"), "r") as f:
             try:
                 return int(f.readline())
             except ValueError:
@@ -32,7 +32,7 @@ def load_high_score():
         return 0
 
 def save_high_score(score):
-    with open("extras\highscore.txt", "w") as f:
+    with open(load_resource("extras\highscore.txt"), "w") as f:
         f.write(str(score))
 
 
@@ -128,23 +128,23 @@ def game_over(score):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            play_game(True)
-        pygame.font.init()
-        font = pygame.font.Font(None, 36)
-        text_color = (255, 255, 255)
-        text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
-        text_rect = text.get_rect()
-        text_rect.topleft = ((WIDTH - text_rect.width) // 2, HEIGHT // 2)
-        clock = pygame.time.Clock()
-        screen.blit(text, text_rect)
-
-        text = font.render(f"your best score is {score}", True, text_color)
-        score_rect = text.get_rect()
-        score_rect.topleft = ((WIDTH - score_rect.width) // 2, 50)
-        clock = pygame.time.Clock()
-        screen.blit(text, score_rect)
-        clock.tick(FPS)
-        pygame.display.flip()
+        if running:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_SPACE]:
+                play_game(True)
+            pygame.font.init()
+            font = pygame.font.Font(None, 36)
+            text_color = (255, 255, 255)
+            text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
+            text_rect = text.get_rect()
+            text_rect.topleft = ((WIDTH - text_rect.width) // 2, HEIGHT // 2)
+            clock = pygame.time.Clock()
+            screen.blit(text, text_rect)
+            text = font.render(f"your best score is {score}", True, text_color)
+            score_rect = text.get_rect()
+            score_rect.topleft = ((WIDTH - score_rect.width) // 2, 50)
+            clock = pygame.time.Clock()
+            screen.blit(text, score_rect)
+            clock.tick(FPS)
+            pygame.display.flip()
 play_game(True)
