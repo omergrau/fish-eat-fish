@@ -4,7 +4,7 @@ import os
 import sys
 def load_resource(filename):
     if hasattr(sys, '_MEIPASS'):
-        path = os.path.join(sys._MEIPASS, filename)
+        path = os.path.join(sys._MEIPASS, 'extras', filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
     return path
