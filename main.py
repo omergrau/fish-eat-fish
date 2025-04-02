@@ -3,7 +3,6 @@ from extras import Player, Fish,level_2
 import os
 import sys
 def load_resource(filename):
-    """Helper function to load resources."""
     if hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, filename)
     else:

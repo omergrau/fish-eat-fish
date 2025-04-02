@@ -3,7 +3,6 @@ import os
 import sys
 
 def load_resource(filename):
-    """Helper function to load resources."""
     if hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, filename)
     else:
@@ -67,11 +66,9 @@ class player(pygame.sprite.Sprite):
         self.score=0
         if len(self.picturs) == self.level:
             self.level-=1
-        image_left = pygame.image.load(load_resource(self.picturs[self.level][1])).convert_alpha()
-        self.rect = image_left.get_rect()
-
-
-        image_right = pygame.transform.scale(image_left, (self.size, self.size))
+        image_right = pygame.image.load(load_resource(self.picturs[self.level][1])).convert_alpha()
+        self.rect = image_right.get_rect()
+        image_right = pygame.transform.scale(image_right, (self.size, self.size))
         self.mask = pygame.mask.from_surface(image_right)
         image_left = pygame.image.load(load_resource(self.picturs[self.level][0])).convert_alpha()
         self.rect = image_left.get_rect()
