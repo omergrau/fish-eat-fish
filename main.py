@@ -64,7 +64,6 @@ def play_game(running):
         level_up(player1)
         for fish_i in fishlist:
             if player1.level != fish_i.level:
-                print(player1.level,fish_i.level)
                 fish_i.level=player1.level
             if fish_i.isdisappear():
                 fishlist.remove(fish_i)
