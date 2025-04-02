@@ -57,7 +57,7 @@ class player(pygame.sprite.Sprite):
         self.size += size // 20
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
-        eatting_music = pygame.mixer.Sound(load_resource("extras\plastic-crunch-83779.mp3"))
+        eatting_music = pygame.mixer.Sound(load_resource("plastic-crunch-83779.mp3"))
         eatting_music.play()
         pygame.mixer.music.set_volume(0.5)
 
