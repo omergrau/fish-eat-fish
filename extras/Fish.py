@@ -17,9 +17,9 @@ class fish(pygame.sprite.Sprite):
         Grandomcolor = random.randint(0, 255)
         tint_color = (Rrandomcolor, Grandomcolor, 0, 255)
         self.picturs = [("my fish left.png", "my fish right.png"), ("level_2_left.PNG", "level_2.PNG")]
-        self.x = random.choice((5, WIDTH))
-        self.y = random.randint(0, HEIGHT)
         self.size = random.random() * 200
+        self.x = random.choice((5,WIDTH))
+        self.y = random.randint(0, HEIGHT-15)
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
         self.level=level
@@ -28,6 +28,7 @@ class fish(pygame.sprite.Sprite):
             self.direction = 1
         else:
             self.direction = -1
+
         if self.direction == 1:
             self.image = load_resource(self.picturs[self.level][1]).convert_alpha()
         else:
@@ -41,6 +42,16 @@ class fish(pygame.sprite.Sprite):
         self.image.set_colorkey((255, 255, 255))
         colored_image.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
         self.image = colored_image
+
+    def check_borders(self):
+        if self.x < 0:
+            self.x = 982
+        if self.x > 982:
+            self.x = 0
+        if self.y < 0:
+            self.y = 0
+        if self.y > 736:
+            self.y = 736
 
     def update(self):
         self.x += self.speed * self.direction

@@ -22,6 +22,20 @@ def toggle_fullscreen(fullscreen):
         screen = pygame.display.set_mode((982, 736))
     return screen
 
+def load_high_score():
+    if os.path.exists("extras\highscore.txt"):
+        with open("extras\highscore.txt", "r") as f:
+            try:
+                return int(f.readline())
+            except ValueError:
+                return 0
+    else:
+        return 0
+
+def save_high_score(score):
+    with open("extras\highscore.txt", "w") as f:
+        f.write(str(score))
+
 
 def play_game(running):
 
@@ -98,13 +112,16 @@ def game_over(score):
     pygame.mixer.music.load("extras/lose_video-game.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play()
+    if score > load_high_score():
+        save_high_score(score)
+    score = (load_high_score())
     WIDTH = 982
     HEIGHT = 736
     FPS = 60
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
-    running = True;
+    running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,11 +135,17 @@ def game_over(score):
 
         font = pygame.font.Font(None, 36)
         text_color = (255, 255, 255)
-        score_text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
-        score_rect = score_text.get_rect()
-        score_rect.topleft = ((WIDTH - score_rect.width) // 2, HEIGHT // 2)
+        text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
+        text_rect = text.get_rect()
+        text_rect.topleft = ((WIDTH - text_rect.width) // 2, HEIGHT // 2)
         clock = pygame.time.Clock()
-        screen.blit(score_text, score_rect)
+        screen.blit(text, text_rect)
+
+        text = font.render(f"your best score is {score}", True, text_color)
+        score_rect = text.get_rect()
+        score_rect.topleft = ((WIDTH - score_rect.width) // 2, 50)
+        clock = pygame.time.Clock()
+        screen.blit(text, score_rect)
         clock.tick(FPS)
         pygame.display.flip()
 play_game(True)
