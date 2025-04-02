@@ -14,12 +14,20 @@ def level_up(player):
     if player.score == 50:
         player.level_up()
 
+def toggle_fullscreen(fullscreen):
+    fullscreen = not fullscreen
+    if fullscreen:
+        screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    else:
+        screen = pygame.display.set_mode((982, 736))
+    return screen
 
 
 def play_game(running):
 
     pygame.init()
     pygame.mixer.init()
+    pygame.font.init()
     pygame.mixer.music.load("extras/game-music-loop-6-144641.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
@@ -28,19 +36,16 @@ def play_game(running):
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
     screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
-
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
     running = running
     clock = pygame.time.Clock()
     FPS = 50
-
     fishlist = pygame.sprite.Group()
     for _ in range(10):
         fishlist.add(Fish.fish(WIDTH, HEIGHT,0))
     player1 = Player.player(WIDTH, HEIGHT)
     font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
+    fullscreen = False
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -48,6 +53,9 @@ def play_game(running):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+            """if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_f:
+                    screen = toggle_fullscreen(fullscreen)"""
 
         keys = pygame.key.get_pressed()
         player1.move(keys)
@@ -107,7 +115,7 @@ def game_over(score):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             play_game(True)
-        pygame.font.init()
+
         font = pygame.font.Font(None, 36)
         text_color = (255, 255, 255)
         score_text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
