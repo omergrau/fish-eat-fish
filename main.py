@@ -8,7 +8,7 @@ def load_resource(filename):
         path = os.path.join(sys._MEIPASS, filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
-    return pygame.image.load(path)
+    return path
 
 def level_up(player):
     if player.score == 50:
@@ -42,13 +42,13 @@ def play_game(running):
     pygame.init()
     pygame.mixer.init()
     pygame.font.init()
-    pygame.mixer.music.load("extras\game-music-loop-6-144641.mp3")
+    pygame.mixer.music.load(load_resource("extras\game-music-loop-6-144641.mp3"))
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
+    screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = running
     clock = pygame.time.Clock()
@@ -93,7 +93,7 @@ def play_game(running):
                     running = False
                     game_over(player1.score)
 
-        screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
+        screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
         players = pygame.sprite.Group()
         players.add(player1)
         players.draw(screen)
@@ -119,7 +119,7 @@ def game_over(score):
     HEIGHT = 736
     FPS = 60
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    screen.blit(load_resource("extras\ocean.png").convert(), (0, 0))
+    screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = True
     while running:

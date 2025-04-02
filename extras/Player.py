@@ -5,14 +5,10 @@ import sys
 def load_resource(filename):
     """Helper function to load resources."""
     if hasattr(sys, '_MEIPASS'):
-        path = os.path.join(sys._MEIPASS, 'extras', filename)
+        path = os.path.join(sys._MEIPASS, filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
-    try:
-        return pygame.image.load(path)
-    except FileNotFoundError as message:
-        path = os.path.join(sys._MEIPASS, 'extras', filename)
-        return pygame.image.load(path)
+    return path
 
 
 class player(pygame.sprite.Sprite):
@@ -61,7 +57,7 @@ class player(pygame.sprite.Sprite):
         self.size += size // 20
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
-        eatting_music = pygame.mixer.Sound("extras\plastic-crunch-83779.mp3")
+        eatting_music = pygame.mixer.Sound(load_resource("extras\plastic-crunch-83779.mp3"))
         eatting_music.play()
         pygame.mixer.music.set_volume(0.5)
 
@@ -71,13 +67,13 @@ class player(pygame.sprite.Sprite):
         self.score=0
         if len(self.picturs) == self.level:
             self.level-=1
-        image_left = load_resource(self.picturs[self.level][1]).convert_alpha()
+        image_left = pygame.image.load(load_resource(self.picturs[self.level][1])).convert_alpha()
         self.rect = image_left.get_rect()
 
 
         image_right = pygame.transform.scale(image_left, (self.size, self.size))
         self.mask = pygame.mask.from_surface(image_right)
-        image_left = load_resource(self.picturs[self.level][0]).convert_alpha()
+        image_left = pygame.image.load(load_resource(self.picturs[self.level][0])).convert_alpha()
         self.rect = image_left.get_rect()
         image_left = pygame.transform.scale(image_left, (self.size, self.size))
         self.mask = pygame.mask.from_surface(image_left)
