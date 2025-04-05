@@ -21,6 +21,8 @@ def toggle_fullscreen(fullscreen):
         screen = pygame.display.set_mode((982, 736))
     return screen
 
+
+
 def load_high_score():
     if os.path.exists(load_resource("extras\highscore.txt")):
         with open(load_resource("extras\highscore.txt"), "r") as f:
@@ -90,7 +92,7 @@ def play_game(running):
                     fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
                 else:
                     running = False
-                    game_over(player1.score)
+                    game_over(player1.score,screen)
 
         screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
         players = pygame.sprite.Group()
@@ -106,45 +108,42 @@ def play_game(running):
         pygame.display.flip()
 
     pygame.quit()
-def game_over(score):
-    pygame.font.init()
+def game_over(score, screen):
     pygame.mixer.music.load(load_resource("extras\lose_video-game.mp3"))
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play()
     if score > load_high_score():
         save_high_score(score)
-    score = (load_high_score())
+    high_score = load_high_score()
     WIDTH = 982
     HEIGHT = 736
     FPS = 60
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = True
+    font = pygame.font.Font(None, 36) # אתחול הפונטים מחוץ ללולאה
+    text_color = (255, 255, 255)
+    clock = pygame.time.Clock()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                pygame.quit() # סגירה כאן אם המשתמש יוצא ממצב GAME OVER
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-        if running:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_SPACE]:
-                play_game(True)
-            pygame.font.init()
-            font = pygame.font.Font(None, 36)
-            text_color = (255, 255, 255)
-            text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
-            text_rect = text.get_rect()
-            text_rect.topleft = ((WIDTH - text_rect.width) // 2, HEIGHT // 2)
-            clock = pygame.time.Clock()
-            screen.blit(text, text_rect)
-            text = font.render(f"your best score is {score}", True, text_color)
-            score_rect = text.get_rect()
-            score_rect.topleft = ((WIDTH - score_rect.width) // 2, 50)
-            clock = pygame.time.Clock()
-            screen.blit(text, score_rect)
-            clock.tick(FPS)
-            pygame.display.flip()
+                    pygame.quit() # סגירה כאן אם המשתמש יוצא ממצב GAME OVER
+                    sys.exit()
+                if event.key == pygame.K_SPACE:
+                    play_game(True) # הפעלה מחדש של המשחק
+
+        text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
+        text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))
+        screen.blit(text, text_rect)
+        text = font.render(f"your best score is {high_score}", True, text_color)
+        score_rect = text.get_rect(center=((WIDTH // 2), 50))
+        screen.blit(text, score_rect)
+        pygame.display.flip()
+        clock.tick(FPS)
 play_game(True)
