@@ -4,13 +4,11 @@ import os
 import sys
 
 def load_resource(filename):
-    if 'js' in sys.modules:
-        path = os.path.join('data', 'extras', filename)
-    elif hasattr(sys, '_MEIPASS'):
+    if hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, 'extras', filename)
     else:
-        path = os.path.join(os.path.dirname(__file__), 'extras', filename)
-    return path
+        path = os.path.join(os.path.dirname(__file__), filename)
+    return pygame.image.load(path)
 class fish(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT,level):
         super().__init__()
