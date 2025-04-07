@@ -4,8 +4,8 @@ import os
 import sys
 def load_resource(filename):
     if 'js' in sys.modules:
-        path = os.path.join('extras', filename)
-    if hasattr(sys, '_MEIPASS'):
+        path =os.path.join('extras', filename)
+    elif hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
@@ -51,7 +51,7 @@ def play_game(running):
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
+    screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = running
     clock = pygame.time.Clock()
@@ -96,7 +96,7 @@ def play_game(running):
                     running = False
                     game_over(player1.score,screen)
 
-        screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
+        screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
         players = pygame.sprite.Group()
         players.add(player1)
         players.draw(screen)
@@ -120,25 +120,25 @@ def game_over(score, screen):
     WIDTH = 982
     HEIGHT = 736
     FPS = 60
-    screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
+    screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = True
-    font = pygame.font.Font(None, 36) # אתחול הפונטים מחוץ ללולאה
+    font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
     clock = pygame.time.Clock()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                pygame.quit() # סגירה כאן אם המשתמש יוצא ממצב GAME OVER
+                pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                    pygame.quit() # סגירה כאן אם המשתמש יוצא ממצב GAME OVER
+                    pygame.quit()
                     sys.exit()
                 if event.key == pygame.K_SPACE:
-                    play_game(True) # הפעלה מחדש של המשחק
+                    play_game(True)
 
         text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
         text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))
