@@ -5,7 +5,7 @@ import os
 import sys
 def load_resource(filename):
     if 'js' in sys.modules:
-        path =filename
+        path = filename
     elif hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, filename)
     else:
@@ -40,27 +40,28 @@ def save_high_score(score):
     with open(load_resource("extras/highscore.txt"), "w") as f:
         f.write(str(score))
 
-pygame.init()
-pygame.mixer.init()
-pygame.font.init()
-pygame.mixer.music.load(load_resource("extras/game-music-loop-6-144641.mp3"))
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
-WIDTH = 982
-HEIGHT = 736
-screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
-pygame.display.set_caption("fish eat fish")
-clock = pygame.time.Clock()
-FPS = 50
-fishlist = pygame.sprite.Group()
-for _ in range(10):
-    fishlist.add(Fish.fish(WIDTH, HEIGHT,0))
-player1 = Player.player(WIDTH, HEIGHT)
-font = pygame.font.Font(None, 36)
-text_color = (255, 255, 255)
+
 
 async def play_game(running=True):
+    pygame.init()
+    pygame.mixer.init()
+    pygame.font.init()
+    pygame.mixer.music.load(load_resource("extras/game-music-loop-6-144641.mp3"))
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+    WIDTH = 982
+    HEIGHT = 736
+    screen = pygame.display.set_mode((WIDTH, HEIGHT), )
+    screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
+    pygame.display.set_caption("fish eat fish")
+    clock = pygame.time.Clock()
+    FPS = 50
+    fishlist = pygame.sprite.Group()
+    for _ in range(10):
+        fishlist.add(Fish.fish(WIDTH, HEIGHT, 0))
+    player1 = Player.player(WIDTH, HEIGHT)
+    font = pygame.font.Font(None, 36)
+    text_color = (255, 255, 255)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -74,7 +75,6 @@ async def play_game(running=True):
 
         keys = pygame.key.get_pressed()
         player1.move(keys)
-
         player1.update()
         level_up(player1)
         for fish_i in fishlist:
@@ -87,7 +87,7 @@ async def play_game(running=True):
                 fish_i.update()
             if pygame.sprite.collide_mask(player1, fish_i):
                 if player1.size > fish_i.size:
-                    player1.eatting(fish_i.size)
+                    player1.eating(fish_i.size)
                     fishlist.remove(fish_i)
                     fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
                 else:

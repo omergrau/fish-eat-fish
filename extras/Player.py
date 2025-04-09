@@ -4,7 +4,7 @@ import sys
 
 def load_resource(filename):
     if 'js' in sys.modules:
-        path =filename
+        path = os.path.join('extras', filename)
     elif hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, 'extras', filename)
     else:
@@ -29,6 +29,7 @@ class player(pygame.sprite.Sprite):
         self.lastmove = pygame.time.get_ticks()
         self.level_up()
         self.image = self.images[1]
+        self.mask = pygame.mask.from_surface(self.image)
 
 
 
@@ -53,15 +54,15 @@ class player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.check_borders()
 
-    def eatting(self,size):
+    def eating(self,size):
         self.score += 1
         self.size += size // 20
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        self.image.set_colorkey((255, 255, 255))
         self.mask = pygame.mask.from_surface(self.image)
-        eatting_music = pygame.mixer.Sound(load_resource("plastic-crunch-83779.mp3"))
-        eatting_music.play()
+        eating_music = pygame.mixer.Sound("extras/plastic-crunch-83779.mp3")
+        eating_music.play()
         pygame.mixer.music.set_volume(0.5)
-
 
     def level_up(self):
         self.level += 1
