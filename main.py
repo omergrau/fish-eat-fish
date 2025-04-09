@@ -1,10 +1,11 @@
 import pygame
+import asyncio
 from extras import Player, Fish
 import os
 import sys
 def load_resource(filename):
     if 'js' in sys.modules:
-        path =os.path.join('extras', filename)
+        path =filename
     elif hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, filename)
     else:
@@ -26,8 +27,8 @@ def toggle_fullscreen(fullscreen):
 
 
 def load_high_score():
-    if os.path.exists(load_resource("extras\highscore.txt")):
-        with open(load_resource("extras\highscore.txt"), "r") as f:
+    if os.path.exists(load_resource("extras/highscore.txt")):
+        with open(load_resource("extras/highscore.txt"), "r") as f:
             try:
                 return int(f.readline())
             except ValueError:
@@ -36,33 +37,30 @@ def load_high_score():
         return 0
 
 def save_high_score(score):
-    with open(load_resource("extras\highscore.txt"), "w") as f:
+    with open(load_resource("extras/highscore.txt"), "w") as f:
         f.write(str(score))
 
+pygame.init()
+pygame.mixer.init()
+pygame.font.init()
+pygame.mixer.music.load(load_resource("extras/game-music-loop-6-144641.mp3"))
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
+WIDTH = 982
+HEIGHT = 736
+screen = pygame.display.set_mode((WIDTH, HEIGHT), )
+screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
+pygame.display.set_caption("fish eat fish")
+clock = pygame.time.Clock()
+FPS = 50
+fishlist = pygame.sprite.Group()
+for _ in range(10):
+    fishlist.add(Fish.fish(WIDTH, HEIGHT,0))
+player1 = Player.player(WIDTH, HEIGHT)
+font = pygame.font.Font(None, 36)
+text_color = (255, 255, 255)
 
-def play_game(running):
-
-    pygame.init()
-    pygame.mixer.init()
-    pygame.font.init()
-    pygame.mixer.music.load(load_resource("extras\game-music-loop-6-144641.mp3"))
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)
-    WIDTH = 982
-    HEIGHT = 736
-    screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
-    pygame.display.set_caption("fish eat fish")
-    running = running
-    clock = pygame.time.Clock()
-    FPS = 50
-    fishlist = pygame.sprite.Group()
-    for _ in range(10):
-        fishlist.add(Fish.fish(WIDTH, HEIGHT,0))
-    player1 = Player.player(WIDTH, HEIGHT)
-    font = pygame.font.Font(None, 36)
-    text_color = (255, 255, 255)
-    fullscreen = False
+async def play_game(running=True):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -108,10 +106,11 @@ def play_game(running):
         score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
         screen.blit(score_text, score_rect)
         pygame.display.flip()
+        await asyncio.sleep(0)
 
     pygame.quit()
 def game_over(score, screen):
-    pygame.mixer.music.load(load_resource("extras\lose_video-game.mp3"))
+    pygame.mixer.music.load(load_resource("extras/lose_video-game.mp3"))
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play()
     if score > load_high_score():
@@ -148,4 +147,4 @@ def game_over(score, screen):
         screen.blit(text, score_rect)
         pygame.display.flip()
         clock.tick(FPS)
-play_game(True)
+asyncio.run(play_game(True))
