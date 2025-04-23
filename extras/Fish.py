@@ -1,8 +1,6 @@
 import pygame
 import random
 from extras import resources
-
-
 class fish(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT,level):
         super().__init__()

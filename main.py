@@ -18,7 +18,24 @@ def toggle_fullscreen(fullscreen,WIDTH,HEIGHT):
         screen = pygame.display.set_mode((WIDTH, HEIGHT), )
     return screen
 
-
+def pause(fullscreen):
+    running =True
+    p_pressed = False
+    keys = pygame.key.get_pressed()
+    while running:
+        if not keys[pygame.K_p]:
+            p_pressed =False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                if event.key == pygame.K_p and not p_pressed:
+                    running = False
+"""                if event.key == pygame.K_f:
+                    fullscreen=not fullscreen
+                    screen = toggle_fullscreen(fullscreen,WIDTH, HEIGHT,)"""
 def load_high_score():
     highscore=resources.load_resource("highscore.txt")
     if os.path.exists(highscore):
@@ -66,6 +83,9 @@ async def play_game(running=True,fullscreen=False):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                     await game_over(player1.score, screen, ocean_image, lose_video_game, fullscreen)
+                if event.key == pygame.K_p or event.key == pygame.K_PAUSE:
+                    pause(fullscreen)
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_f:
                     fullscreen=not fullscreen
