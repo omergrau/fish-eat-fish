@@ -151,4 +151,5 @@ async def game_over(score, screen):
         pygame.display.flip()
         await asyncio.sleep(0)
         clock.tick(FPS)
-asyncio.run(play_game(True))
+#asyncio.run(play_game(True))
+play_game(True)
