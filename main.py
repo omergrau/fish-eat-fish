@@ -95,7 +95,7 @@ async def play_game(running=True):
                     fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
                 else:
                     running = False
-                    game_over(player1.score,screen)
+                    await game_over(player1.score,screen)
 
         screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
         players = pygame.sprite.Group()
@@ -112,7 +112,7 @@ async def play_game(running=True):
         await asyncio.sleep(0)
 
     pygame.quit()
-def game_over(score, screen):
+async def game_over(score, screen):
     if score > load_high_score():
         save_high_score(score)
     high_score = load_high_score()
@@ -135,15 +135,12 @@ def game_over(score, screen):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                user_interacted=True
                 if event.key == pygame.K_ESCAPE:
                     running = False
                     pygame.quit()
                     sys.exit()
                 if event.key == pygame.K_SPACE:
-                    play_game(True)
-            if event.type == MOUSEMOTION:
-                user_interacted = True
+                    await(play_game(True))
 
         text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
         text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))
@@ -152,5 +149,6 @@ def game_over(score, screen):
         score_rect = text.get_rect(center=((WIDTH // 2), 50))
         screen.blit(text, score_rect)
         pygame.display.flip()
+        await asyncio.sleep(0)
         clock.tick(FPS)
 asyncio.run(play_game(True))
