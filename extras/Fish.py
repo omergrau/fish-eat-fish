@@ -2,11 +2,11 @@ import pygame
 import random
 import os
 import sys
-
+from extras import resources
 def load_resource(filename):
     if 'js' in sys.modules:
         path = os.path.join('extras', filename)
-    if hasattr(sys, '_MEIPASS'):
+    elif hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, 'extras', filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
@@ -32,9 +32,9 @@ class fish(pygame.sprite.Sprite):
             self.direction = -1
 
         if self.direction == 1:
-            self.image = load_resource(self.picturs[self.level][1]).convert_alpha()
+            self.image = pygame.image.load(resources.load_resource(self.picturs[self.level][1])).convert_alpha()
         else:
-            self.image = load_resource(self.picturs[self.level][0]).convert_alpha()
+            self.image = pygame.image.load(resources.load_resource(self.picturs[self.level][0])).convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         colored_image = self.image.copy()
         tint_surface = pygame.Surface(colored_image.get_size(), pygame.SRCALPHA)
