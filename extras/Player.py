@@ -1,11 +1,9 @@
 import pygame
-import os
-import sys
 from extras import resources
 
 
 class player(pygame.sprite.Sprite):
-    def __init__(self, WIDTH, HEIGHT):
+    def __init__(self, WIDTH, HEIGHT,crunch):
         super().__init__()
         self.picturs = [("my fish left.png","my fish right.png"), ("level_2_left.PNG", "level_2.PNG")]
         self.x = WIDTH // 2
@@ -22,7 +20,7 @@ class player(pygame.sprite.Sprite):
         self.level_up()
         self.image = self.images[1]
         self.mask = pygame.mask.from_surface(self.image)
-        self.eating_music = pygame.mixer.Sound(resources.load_resource("plastic-crunch.wav"))
+        self.eating_music = pygame.mixer.Sound(crunch)
 
 
 

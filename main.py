@@ -37,13 +37,11 @@ def save_high_score(score):
 
 
 async def play_game(running=True,fullscreen=False):
-    pygame.init()
-    pygame.mixer.init()
-    pygame.font.init()
     entry_load = resources.entry_load()
     ocean_image=entry_load[0]
     lose_video_game=entry_load[1]
     main_game_music=entry_load[2]
+    crunch=entry_load[3]
     pygame.mixer.music.load(main_game_music)
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
@@ -57,7 +55,7 @@ async def play_game(running=True,fullscreen=False):
     fishlist = pygame.sprite.Group()
     for _ in range(10):
         fishlist.add(Fish.fish(WIDTH, HEIGHT, 0))
-    player1 = Player.player(WIDTH, HEIGHT)
+    player1 = Player.player(WIDTH, HEIGHT,crunch)
     font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
     while running:
@@ -67,6 +65,7 @@ async def play_game(running=True,fullscreen=False):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                    await game_over(player1.score, screen, ocean_image, lose_video_game, fullscreen)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_f:
                     fullscreen=not fullscreen
@@ -117,7 +116,8 @@ async def game_over(score, screen,ocean_image,lose_video_game,fullscreen):
     HEIGHT = 736
     FPS = 60
     toggle_fullscreen(fullscreen,WIDTH, HEIGHT)
-    #screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
+    screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
+    pygame.display.set_caption("fish eat fish")
     pygame.display.set_caption("fish eat fish")
     running = True
     font = pygame.font.Font(None, 36)

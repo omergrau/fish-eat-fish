@@ -15,4 +15,5 @@ def entry_load():
      ocean=load_resource("ocean.png")
      lose_video_game = load_resource("lose_video-game.wav")
      main_game_music = load_resource("game-music-loop.wav")
-     return ocean,lose_video_game,main_game_music
+     crunch=load_resource("plastic-crunch.wav")
+     return ocean,lose_video_game,main_game_music,crunch
