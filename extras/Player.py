@@ -29,6 +29,8 @@ class player(pygame.sprite.Sprite):
         self.lastmove = pygame.time.get_ticks()
         self.level_up()
         self.image = self.images[1]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.eating_music = pygame.mixer.Sound(load_resource("plastic-crunch.wav"))
 
 
 
@@ -53,15 +55,14 @@ class player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.check_borders()
 
-    def eatting(self,size):
+    def eating(self,size):
         self.score += 1
         self.size += size // 20
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        self.image.set_colorkey((255, 255, 255))
         self.mask = pygame.mask.from_surface(self.image)
-        eatting_music = pygame.mixer.Sound(load_resource("plastic-crunch-83779.mp3"))
-        eatting_music.play()
+        self.eating_music.play()
         pygame.mixer.music.set_volume(0.5)
-
 
     def level_up(self):
         self.level += 1
@@ -124,5 +125,6 @@ class player(pygame.sprite.Sprite):
             self.y = 0
         if self.y > 736:
             self.y = 736
+
 
 

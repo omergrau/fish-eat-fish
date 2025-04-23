@@ -1,4 +1,8 @@
 import pygame
+import asyncio
+
+from pygame import MOUSEMOTION
+
 from extras import Player, Fish
 import os
 import sys
@@ -26,8 +30,8 @@ def toggle_fullscreen(fullscreen):
 
 
 def load_high_score():
-    if os.path.exists(load_resource("extras\highscore.txt")):
-        with open(load_resource("extras\highscore.txt"), "r") as f:
+    if os.path.exists(load_resource("extras/highscore.txt")):
+        with open(load_resource("extras/highscore.txt"), "r") as f:
             try:
                 return int(f.readline())
             except ValueError:
@@ -36,33 +40,31 @@ def load_high_score():
         return 0
 
 def save_high_score(score):
-    with open(load_resource("extras\highscore.txt"), "w") as f:
+    with open(load_resource("extras/highscore.txt"), "w") as f:
         f.write(str(score))
 
 
-def play_game(running):
 
+async def play_game(running=True):
     pygame.init()
     pygame.mixer.init()
     pygame.font.init()
-    pygame.mixer.music.load(load_resource("extras\game-music-loop-6-144641.mp3"))
+    pygame.mixer.music.load(load_resource("extras/game-music-loop.wav"))
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
     WIDTH = 982
     HEIGHT = 736
     screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
+    screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
-    running = running
     clock = pygame.time.Clock()
     FPS = 50
     fishlist = pygame.sprite.Group()
     for _ in range(10):
-        fishlist.add(Fish.fish(WIDTH, HEIGHT,0))
+        fishlist.add(Fish.fish(WIDTH, HEIGHT, 0))
     player1 = Player.player(WIDTH, HEIGHT)
     font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
-    fullscreen = False
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -76,7 +78,6 @@ def play_game(running):
 
         keys = pygame.key.get_pressed()
         player1.move(keys)
-
         player1.update()
         level_up(player1)
         for fish_i in fishlist:
@@ -89,14 +90,14 @@ def play_game(running):
                 fish_i.update()
             if pygame.sprite.collide_mask(player1, fish_i):
                 if player1.size > fish_i.size:
-                    player1.eatting(fish_i.size)
+                    player1.eating(fish_i.size)
                     fishlist.remove(fish_i)
                     fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
                 else:
                     running = False
-                    game_over(player1.score,screen)
+                    await game_over(player1.score,screen)
 
-        screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
+        screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
         players = pygame.sprite.Group()
         players.add(player1)
         players.draw(screen)
@@ -108,37 +109,38 @@ def play_game(running):
         score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
         screen.blit(score_text, score_rect)
         pygame.display.flip()
+        await asyncio.sleep(0)
 
     pygame.quit()
-def game_over(score, screen):
-    pygame.mixer.music.load(load_resource("extras\lose_video-game.mp3"))
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play()
+async def game_over(score, screen):
     if score > load_high_score():
         save_high_score(score)
     high_score = load_high_score()
     WIDTH = 982
     HEIGHT = 736
     FPS = 60
-    screen.blit(pygame.image.load(load_resource("extras\ocean.png")).convert(), (0, 0))
+    screen.blit(pygame.image.load(load_resource("extras/ocean.png")).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     running = True
-    font = pygame.font.Font(None, 36) # אתחול הפונטים מחוץ ללולאה
+    font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
     clock = pygame.time.Clock()
+    pygame.mixer.music.load(load_resource("extras/lose_video-game.wav"))
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                pygame.quit() # סגירה כאן אם המשתמש יוצא ממצב GAME OVER
+                pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                    pygame.quit() # סגירה כאן אם המשתמש יוצא ממצב GAME OVER
+                    pygame.quit()
                     sys.exit()
                 if event.key == pygame.K_SPACE:
-                    play_game(True) # הפעלה מחדש של המשחק
+                    await(play_game(True))
 
         text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
         text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))
@@ -147,5 +149,7 @@ def game_over(score, screen):
         score_rect = text.get_rect(center=((WIDTH // 2), 50))
         screen.blit(text, score_rect)
         pygame.display.flip()
+        await asyncio.sleep(0)
         clock.tick(FPS)
+#asyncio.run(play_game(True))
 play_game(True)
