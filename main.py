@@ -1,12 +1,15 @@
 import pygame
 import asyncio
+
+from pygame import MOUSEMOTION
+
 from extras import Player, Fish
 import os
 import sys
 def load_resource(filename):
     if 'js' in sys.modules:
-        path = filename
-    elif hasattr(sys, '_MEIPASS'):
+        path = os.path.join('extras', filename)
+    if hasattr(sys, '_MEIPASS'):
         path = os.path.join(sys._MEIPASS, filename)
     else:
         path = os.path.join(os.path.dirname(__file__), filename)
@@ -46,7 +49,7 @@ async def play_game(running=True):
     pygame.init()
     pygame.mixer.init()
     pygame.font.init()
-    pygame.mixer.music.load(load_resource("extras/game-music-loop-6-144641.mp3"))
+    pygame.mixer.music.load(load_resource("extras/game-music-loop.wav"))
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
     WIDTH = 982
@@ -110,9 +113,6 @@ async def play_game(running=True):
 
     pygame.quit()
 def game_over(score, screen):
-    pygame.mixer.music.load(load_resource("extras/lose_video-game.mp3"))
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play()
     if score > load_high_score():
         save_high_score(score)
     high_score = load_high_score()
@@ -125,6 +125,9 @@ def game_over(score, screen):
     font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
     clock = pygame.time.Clock()
+    pygame.mixer.music.load(load_resource("extras/lose_video-game.wav"))
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -132,12 +135,15 @@ def game_over(score, screen):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
+                user_interacted=True
                 if event.key == pygame.K_ESCAPE:
                     running = False
                     pygame.quit()
                     sys.exit()
                 if event.key == pygame.K_SPACE:
                     play_game(True)
+            if event.type == MOUSEMOTION:
+                user_interacted = True
 
         text = font.render(f"Press SPACE on the keyboard to rest or esc to Quit", True, text_color)
         text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))

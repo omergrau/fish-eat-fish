@@ -30,6 +30,7 @@ class player(pygame.sprite.Sprite):
         self.level_up()
         self.image = self.images[1]
         self.mask = pygame.mask.from_surface(self.image)
+        self.eating_music = pygame.mixer.Sound(load_resource("plastic-crunch.wav"))
 
 
 
@@ -60,8 +61,7 @@ class player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey((255, 255, 255))
         self.mask = pygame.mask.from_surface(self.image)
-        eating_music = pygame.mixer.Sound("extras/plastic-crunch-83779.mp3")
-        eating_music.play()
+        self.eating_music.play()
         pygame.mixer.music.set_volume(0.5)
 
     def level_up(self):
@@ -125,5 +125,6 @@ class player(pygame.sprite.Sprite):
             self.y = 0
         if self.y > 736:
             self.y = 736
+
 
 
