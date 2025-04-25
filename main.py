@@ -63,7 +63,7 @@ async def play_game(running=True,fullscreen=False):
     FPS = 50
     fishlist = pygame.sprite.Group()
     for _ in range(10):
-        fishlist.add(Fish.fish(WIDTH, HEIGHT, 0))
+        fishlist.add(Fish.fish(WIDTH, HEIGHT))
     player1 = Player.player(WIDTH, HEIGHT,crunch)
     font = pygame.font.Font(None, 36)
     text_color = (255, 255, 255)
@@ -95,14 +95,14 @@ async def play_game(running=True,fullscreen=False):
                     fish_i.level=player1.level
                 if fish_i.isdisappear():
                     fishlist.remove(fish_i)
-                    fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
+                    fishlist.add(Fish.fish(WIDTH, HEIGHT))
                 else:
                     fish_i.update()
                 if pygame.sprite.collide_mask(player1, fish_i):
                     if player1.size > fish_i.size:
                         player1.eating(fish_i.size)
                         fishlist.remove(fish_i)
-                        fishlist.add(Fish.fish(WIDTH, HEIGHT,player1.level))
+                        fishlist.add(Fish.fish(WIDTH, HEIGHT))
                     else:
                         running = False
                         await game_over(player1.score,screen,ocean_image,lose_video_game,fullscreen)

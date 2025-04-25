@@ -2,7 +2,7 @@ import pygame
 import random
 from extras import resources
 class fish(pygame.sprite.Sprite):
-    def __init__(self, WIDTH, HEIGHT,level):
+    def __init__(self, WIDTH, HEIGHT):
         super().__init__()
         Rrandomcolor = random.randint(0, 255)
         Grandomcolor = random.randint(0, 255)
@@ -13,7 +13,7 @@ class fish(pygame.sprite.Sprite):
         self.y = random.randint(0, HEIGHT-15)
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
-        self.level=level
+        self.level=0
         self.speed = random.randint(1, 5)
         if self.x == 5:
             self.direction = 1
