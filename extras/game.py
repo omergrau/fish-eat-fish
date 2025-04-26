@@ -36,17 +36,20 @@ class game():
         self.font = pygame.font.Font(None, 36)
         self.text_color = (255, 255, 255)
 
+
     def toggle_fullscreen(self):
         if self.fullscreen:
             self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
         else:
             self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+
     def update_player(self):
             keys = pygame.key.get_pressed()
             self.player1.move(keys)
             self.player1.update()
             """self.level_up(player1)"""
+
 
     def update_enemies(self):
         for fish_i in self.fishlist:
@@ -62,9 +65,12 @@ class game():
                     self.fishlist.add(Fish.fish(WIDTH, HEIGHT))
                 else:
                     self.game_mode = "game over"
+
+
     def draw(self):
         self.fishlist.draw(self.screen)
         self.players.draw(self.screen)
+
 
     def update_keyboard_input(self):
         for event in pygame.event.get():
@@ -88,6 +94,7 @@ class game():
             else:
                 pause_pressed = False
 
+
     def update_game(self):
         if self.game_mode == "quit":
             self.running = False
@@ -102,11 +109,13 @@ class game():
             score_rect = text.get_rect(center=((WIDTH // 2), (HEIGHT // 2) + 80))
             self.screen.blit(text, score_rect)
 
+
     def update(self):
 
         self.update_player()
         self.update_enemies()
         self.update_keyboard_input()
+
 
     async def game(self):
         self.running = True
@@ -124,8 +133,25 @@ class game():
         print("exit game")
         pygame.quit()
 
+
     def game_over(self):
         pass
+
+
+    def load_game_resources(self):
+        self.load_images()
+        self.load_sounds()
+
+
+    def load_images(self):
+        pass
+
+
+    def load_sounds(self):
+        pass
+
+
+
 if __name__ == "__main__":
     pygame.init()
     pygame.mixer.init()
