@@ -1,8 +1,6 @@
 import pygame
 import asyncio
 from pygame import MOUSEMOTION
-from pygame.examples.sprite_texture import clock
-
 from extras import Player, Fish,resources
 import os
 import sys
