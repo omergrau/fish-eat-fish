@@ -96,6 +96,7 @@ class game():
 
 
     def update_game(self):
+        self.screen.blit(pygame.image.load(self.entry_resources[0]).convert(), (0, 0))
         if self.game_mode == "quit":
             self.running = False
         if self.game_mode == "game over":
@@ -120,12 +121,13 @@ class game():
     async def game(self):
         self.running = True
         while self.running:
+            self.update_game()
             if self.game_mode=="game":
                 self.update()
                 self.draw()
             if self.game_mode == "game over":
                 self.game_over()
-            self.update_game()
+
             self.clock.tick(FPS)
             pygame.display.flip()
             await asyncio.sleep(0)
