@@ -7,15 +7,15 @@ class fish(pygame.sprite.Sprite):
         Rrandomcolor = random.randint(0, 255)
         Grandomcolor = random.randint(0, 255)
         tint_color = (Rrandomcolor, Grandomcolor, 0, 255)
-        self.picturs = [("my fish left.png", "my fish right.png"), ("level_2_left.PNG", "level_2.PNG")]
+        self.picturs = [("../assets/images/my fish left.png", "../assets/images/my fish right.png")]
         self.size = random.random() * 200
-        self.x = random.choice((5,WIDTH))
-        self.y = random.randint(0, HEIGHT-15)
+        self.x = random.choice((-199,WIDTH))
+        self.y = random.randint(0, HEIGHT-50)
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
         self.level=0
         self.speed = random.randint(1, 5)
-        if self.x == 5:
+        if self.x ==-199:
             self.direction = 1
         else:
             self.direction = -1
@@ -49,7 +49,7 @@ class fish(pygame.sprite.Sprite):
         self.rect.topleft = (self.x, self.y)
 
     def isdisappear(self):
-        if self.x < 0 or self.x > self.WIDTH:
+        if self.x < -200 or self.x > self.WIDTH:
             return True
     def level_up(self,level):
         self.level += 1
