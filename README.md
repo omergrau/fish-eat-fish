@@ -8,3 +8,5 @@ My hope is that you'll find it fun to play!
 
 To run the game, simply execute the `main.py` file using Python and Pygame:
 
+![Game Cover](https://github.com/omergrau/fish-eat-fish/blob/master/game%20cover.png)
+
