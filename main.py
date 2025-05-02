@@ -1,10 +1,9 @@
 import pygame
 import asyncio
-from pygame import MOUSEMOTION
 from extras import Player, Fish,resources
 import os
 import sys
-from extras.resources import entry_load
+from extras.resources import *
 
 
 def level_up(player):
@@ -172,4 +171,3 @@ pygame.mixer.init()
 pygame.font.init()
 if __name__ == "__main__":
     game = asyncio.run(play_game(True))
-

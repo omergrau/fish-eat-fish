@@ -3,9 +3,9 @@ from extras import resources
 
 
 class player(pygame.sprite.Sprite):
-    def __init__(self, WIDTH, HEIGHT,crunch):
+    def __init__(self, WIDTH, HEIGHT,crunch,left_image=0,right_image=0):
         super().__init__()
-        self.picturs = [("my fish left.png","my fish right.png"), ("level_2_left.PNG", "level_2.PNG")]
+        self.picturs = [("../assets/images/my fish left.png","../assets/images/my fish right.png")]
         self.x = WIDTH // 2
         self.y = HEIGHT // 2
         self.score = 0
