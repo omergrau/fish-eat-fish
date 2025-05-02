@@ -1,19 +1,9 @@
 import pygame
-import os
-import sys
-
-def load_resource(filename):
-    if 'js' in sys.modules:
-        path = os.path.join('extras', filename)
-    elif hasattr(sys, '_MEIPASS'):
-        path = os.path.join(sys._MEIPASS, 'extras', filename)
-    else:
-        path = os.path.join(os.path.dirname(__file__), filename)
-    return path
+from extras import resources
 
 
 class player(pygame.sprite.Sprite):
-    def __init__(self, WIDTH, HEIGHT):
+    def __init__(self, WIDTH, HEIGHT,crunch):
         super().__init__()
         self.picturs = [("my fish left.png","my fish right.png"), ("level_2_left.PNG", "level_2.PNG")]
         self.x = WIDTH // 2
@@ -30,6 +20,7 @@ class player(pygame.sprite.Sprite):
         self.level_up()
         self.image = self.images[1]
         self.mask = pygame.mask.from_surface(self.image)
+        self.eating_music = pygame.mixer.Sound(crunch)
 
 
 
@@ -60,8 +51,7 @@ class player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey((255, 255, 255))
         self.mask = pygame.mask.from_surface(self.image)
-        eating_music = pygame.mixer.Sound("extras/plastic-crunch-83779.mp3")
-        eating_music.play()
+        self.eating_music.play()
         pygame.mixer.music.set_volume(0.5)
 
     def level_up(self):
@@ -69,11 +59,11 @@ class player(pygame.sprite.Sprite):
         self.score=0
         if len(self.picturs) == self.level:
             self.level-=1
-        image_right = pygame.image.load(load_resource(self.picturs[self.level][1])).convert_alpha()
+        image_right = pygame.image.load(resources.load_resource(self.picturs[self.level][1])).convert_alpha()
         self.rect = image_right.get_rect()
         image_right = pygame.transform.scale(image_right, (self.size, self.size))
         self.mask = pygame.mask.from_surface(image_right)
-        image_left = pygame.image.load(load_resource(self.picturs[self.level][0])).convert_alpha()
+        image_left = pygame.image.load(resources.load_resource(self.picturs[self.level][0])).convert_alpha()
         self.rect = image_left.get_rect()
         image_left = pygame.transform.scale(image_left, (self.size, self.size))
         self.mask = pygame.mask.from_surface(image_left)
@@ -125,5 +115,6 @@ class player(pygame.sprite.Sprite):
             self.y = 0
         if self.y > 736:
             self.y = 736
+
 
 
