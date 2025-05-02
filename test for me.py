@@ -1,172 +1,204 @@
 import pygame
 import asyncio
-from pygame import MOUSEMOTION
-from extras import Player, Fish,resources
+from extras import Player, Fish, resources
 import os
 import sys
-from extras.resources import entry_load
+from extras.resources import *
+from extras.constants import *
 
 
-def level_up(player):
-    if player.score == 50:
-        player.level_up()
+class game():
+    def __init__(self):
+        self.pause = False
+        self.fullscreen = False
+        self.pause_pressed = False
+        self.images = {}
+        self.sounds = {}
+        self.load_game_resources()
+        self.high_score = 0
+        self.score=0
+        self.game_mode = "game"
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT), )
+        self.clock = pygame.time.Clock()
+        self.fishlist = pygame.sprite.Group()
+        self.players = pygame.sprite.Group()
+        self.font = pygame.font.Font(None, 36)
+        self.text_color = (255, 255, 255)
 
-def toggle_fullscreen(fullscreen,WIDTH,HEIGHT):
-    if fullscreen:
-        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
-    else:
-        screen = pygame.display.set_mode((WIDTH, HEIGHT), )
-    return screen
+    """def level_up(player):
+        if player.score == 50:
+            player.level_up()"""
 
-"""def pause(pause,pause_pressed):
-        if pause_pressed not pause:# pause pressed on the first time
-            return True
-        elif not pause_pressed:# continue the game
-            pause=False
-            pause_pressed = True
-        if not keys[pygame.K_p]:
-            pause_pressed=False"""
+    """def toggle_fullscreen(self):
+        if self.fullscreen:
+            screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+        else:
+            screen = pygame.display.set_mode((WIDTH, HEIGHT), )
+        return screen"""
 
-def load_high_score():
-    highscore=resources.load_resource("highscore.txt")
-    if os.path.exists(highscore):
-        with open(highscore, "r") as f:
-            try:
-                return int(f.readline())
-            except ValueError:
-                return 0
-    else:
-        return 0
+    """def pause(pause,pause_pressed):
+            if pause_pressed not pause:# pause pressed on the first time
+                return True
+            elif not pause_pressed:# continue the game
+                pause=False
+                pause_pressed = True
+            if not keys[pygame.K_p]:
+                pause_pressed=False"""
 
-def save_high_score(score):
-    with open(resources.load_resource("highscore.txt"), "w") as f:
-        f.write(str(score))
+    """def load_high_score(self):
+        highscore = resources.load_resource("highscore.txt")
+        if os.path.exists(highscore):
+            with open(highscore, "r") as f:
+                try:
+                    return int(f.readline())
+                except ValueError:
+                    return 0
+        else:
+            return 0"""
 
+    """def save_high_score(score):
+        with open(resources.load_resource("highscore.txt"), "w") as f:
+            f.write(str(score))"""
 
-async def play_game(running=True,fullscreen=False):
-    pause=False
-    pause_pressed=False
-    entry_load = resources.entry_load()
-    ocean_image=entry_load[0]
-    lose_video_game=entry_load[1]
-    main_game_music=entry_load[2]
-    crunch=entry_load[3]
-    pygame.mixer.music.load(main_game_music)
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)
-    WIDTH = 982
-    HEIGHT = 736
-    screen = toggle_fullscreen(fullscreen,WIDTH, HEIGHT,)
-    screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
-    pygame.display.set_caption("fish eat fish")
-    clock = pygame.time.Clock()
-    FPS = 50
-    fishlist = pygame.sprite.Group()
-    for _ in range(10):
-        fishlist.add(Fish.fish(WIDTH, HEIGHT))
-    player1 = Player.player(WIDTH, HEIGHT,crunch)
-    font = pygame.font.Font(None, 36)
-    text_color = (255, 255, 255)
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+    def load_game_resources(self):
+        self.load_images()
+        self.load_sounds()
+
+    def load_images(self):
+        self.images["my fish left"] = load_resource("../assets/images/my fish left.png")
+        self.images["my fish right"] = load_resource("../assets/images/my fish right.png")
+        self.images["ocean"] = load_resource("../assets/images/ocean.png")
+
+    def load_sounds(self):
+        self.sounds["game music"] = load_resource("../assets/music/game-music-loop.wav")
+        self.sounds["lose"] = load_resource("../assets/music/lose_video-game.wav")
+        self.sounds["eat"] = load_resource("../assets/music/plastic-crunch.wav")
+
+    async def play_game(running=True, fullscreen=False):
+        pause = False
+        pause_pressed = False
+        entry_load = resources.entry_load()
+        ocean_image = entry_load[0]
+        lose_video_game = entry_load[1]
+        main_game_music = entry_load[2]
+        crunch = entry_load[3]
+        pygame.mixer.music.load(main_game_music)
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play(-1)
+        WIDTH = 982
+        HEIGHT = 736
+        screen = toggle_fullscreen(fullscreen, WIDTH, HEIGHT, )
+        screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
+        pygame.display.set_caption("fish eat fish")
+        clock = pygame.time.Clock()
+        FPS = 50
+        fishlist = pygame.sprite.Group()
+        for _ in range(10):
+            fishlist.add(Fish.fish(WIDTH, HEIGHT))
+        player1 = Player.player(WIDTH, HEIGHT, crunch)
+        font = pygame.font.Font(None, 36)
+        text_color = (255, 255, 255)
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     running = False
-                    await game_over(player1.score, screen, ocean_image, lose_video_game, fullscreen)
-                if event.key == pygame.K_p and not pause_pressed:
-                    pause= not pause
-                    pause_pressed=True
-                if not event.key == pygame.K_p:
-                    pause_pressed = False
-                if event.key == pygame.K_f:
-                    fullscreen=not fullscreen
-                    screen = toggle_fullscreen(fullscreen,WIDTH, HEIGHT,)
-            else:
-                pause_pressed = False
-        if not pause:
-            keys = pygame.key.get_pressed()
-            player1.move(keys)
-            player1.update()
-            level_up(player1)
-            for fish_i in fishlist:
-                if player1.level != fish_i.level:
-                    fish_i.level=player1.level
-                if fish_i.isdisappear():
-                    fishlist.remove(fish_i)
-                    fishlist.add(Fish.fish(WIDTH, HEIGHT))
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                        await game_over(player1.score, screen, ocean_image, lose_video_game, fullscreen)
+                    if event.key == pygame.K_p and not pause_pressed:
+                        pause = not pause
+                        pause_pressed = True
+                    if not event.key == pygame.K_p:
+                        pause_pressed = False
+                    if event.key == pygame.K_f:
+                        fullscreen = not fullscreen
+                        screen = toggle_fullscreen(fullscreen, WIDTH, HEIGHT, )
                 else:
-                    fish_i.update()
-                if pygame.sprite.collide_mask(player1, fish_i):
-                    if player1.size > fish_i.size:
-                        player1.eating(fish_i.size)
+                    pause_pressed = False
+            if not pause:
+                keys = pygame.key.get_pressed()
+                player1.move(keys)
+                player1.update()
+                level_up(player1)
+                for fish_i in fishlist:
+                    if player1.level != fish_i.level:
+                        fish_i.level = player1.level
+                    if fish_i.isdisappear():
                         fishlist.remove(fish_i)
                         fishlist.add(Fish.fish(WIDTH, HEIGHT))
                     else:
-                        running = False
-                        await game_over(player1.score,screen,ocean_image,lose_video_game,fullscreen)
+                        fish_i.update()
+                    if pygame.sprite.collide_mask(player1, fish_i):
+                        if player1.size > fish_i.size:
+                            player1.eating(fish_i.size)
+                            fishlist.remove(fish_i)
+                            fishlist.add(Fish.fish(WIDTH, HEIGHT))
+                        else:
+                            running = False
+                            await game_over(player1.score, screen, ocean_image, lose_video_game, fullscreen)
 
-        screen.blit(pygame.image.load(resources.entry_load()[0]).convert(), (0, 0))
-        players = pygame.sprite.Group()
-        players.add(player1)
-        players.draw(screen)
-        clock.tick(FPS)
-        fishlist.draw(screen)
+            screen.blit(pygame.image.load(resources.entry_load()[0]).convert(), (0, 0))
+            players = pygame.sprite.Group()
+            players.add(player1)
+            players.draw(screen)
+            clock.tick(FPS)
+            fishlist.draw(screen)
 
-        score_text = font.render(f"score: {player1.score}", True, text_color)
-        score_rect = score_text.get_rect()
-        score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
-        screen.blit(score_text, score_rect)
-        pygame.display.flip()
-        await asyncio.sleep(0)
+            score_text = font.render(f"score: {player1.score}", True, text_color)
+            score_rect = score_text.get_rect()
+            score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
+            screen.blit(score_text, score_rect)
+            pygame.display.flip()
+            await asyncio.sleep(0)
 
-    pygame.quit()
+        pygame.quit()
 
-
-async def game_over(score, screen,ocean_image,lose_video_game,fullscreen):
-    if score > load_high_score():
-        save_high_score(score)
-    high_score = load_high_score()
-    WIDTH = 982
-    HEIGHT = 736
-    FPS = 60
-    toggle_fullscreen(fullscreen,WIDTH, HEIGHT)
-    screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
-    pygame.display.set_caption("fish eat fish")
-    running = True
-    font = pygame.font.Font(None, 36)
-    text_color = (255, 255, 255)
-    clock = pygame.time.Clock()
-    pygame.mixer.music.load(lose_video_game)
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play()
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+    async def game_over(score, screen, ocean_image, lose_video_game, fullscreen):
+        if score > load_high_score():
+            save_high_score(score)
+        high_score = load_high_score()
+        WIDTH = 982
+        HEIGHT = 736
+        FPS = 60
+        toggle_fullscreen(fullscreen, WIDTH, HEIGHT)
+        screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
+        pygame.display.set_caption("fish eat fish")
+        running = True
+        font = pygame.font.Font(None, 36)
+        text_color = (255, 255, 255)
+        clock = pygame.time.Clock()
+        pygame.mixer.music.load(lose_video_game)
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play()
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     running = False
                     pygame.quit()
                     sys.exit()
-                if event.key == pygame.K_SPACE:
-                    await(play_game(True,fullscreen))
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                        pygame.quit()
+                        sys.exit()
+                    if event.key == pygame.K_SPACE:
+                        await(play_game(True, fullscreen))
 
-        text = font.render(f"Press SPACE on the keyboard to start the game or esc to Quit", True, text_color)
-        text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))
-        screen.blit(text, text_rect)
-        text = font.render(f"your best score is {high_score}", True, text_color)
-        score_rect = text.get_rect(center=((WIDTH // 2), 50))
-        screen.blit(text, score_rect)
-        text = font.render(f"press f for full screen or p to pause the game", True, text_color)
-        score_rect = text.get_rect(center=((WIDTH // 2),(HEIGHT // 2)+80))
-        screen.blit(text, score_rect)
-        pygame.display.flip()
-        await asyncio.sleep(0)
-        clock.tick(FPS)
+            text = font.render(f"Press SPACE on the keyboard to start the game or esc to Quit", True, text_color)
+            text_rect = text.get_rect(center=((WIDTH // 2), HEIGHT // 2))
+            screen.blit(text, text_rect)
+            text = font.render(f"your best score is {high_score}", True, text_color)
+            score_rect = text.get_rect(center=((WIDTH // 2), 50))
+            screen.blit(text, score_rect)
+            text = font.render(f"press f for full screen or p to pause the game", True, text_color)
+            score_rect = text.get_rect(center=((WIDTH // 2), (HEIGHT // 2) + 80))
+            screen.blit(text, score_rect)
+            pygame.display.flip()
+            await asyncio.sleep(0)
+            clock.tick(FPS)
+
+
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()

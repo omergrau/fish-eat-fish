@@ -13,3 +13,11 @@ def load_resource(filename,type=""):
     else:
         path = os.path.join("", filename[3:])
     return path
+
+
+def entry_load():
+    ocean = load_resource("../assets/images/ocean.png")
+    lose_video_game = load_resource("../assets/music/lose_video-game.wav")
+    main_game_music = load_resource("../assets/music/game-music-loop.wav")
+    crunch = load_resource("../assets/music/plastic-crunch.wav")
+    return ocean, lose_video_game, main_game_music, crunch
