@@ -1,19 +1,8 @@
 import pygame
 import random
-import os
-import sys
 from extras import resources
-def load_resource(filename):
-    if 'js' in sys.modules:
-        path = os.path.join('extras', filename)
-    elif hasattr(sys, '_MEIPASS'):
-        path = os.path.join(sys._MEIPASS, 'extras', filename)
-    else:
-        path = os.path.join(os.path.dirname(__file__), filename)
-    return pygame.image.load(path)
-
 class fish(pygame.sprite.Sprite):
-    def __init__(self, WIDTH, HEIGHT,level):
+    def __init__(self, WIDTH, HEIGHT):
         super().__init__()
         Rrandomcolor = random.randint(0, 255)
         Grandomcolor = random.randint(0, 255)
@@ -24,7 +13,7 @@ class fish(pygame.sprite.Sprite):
         self.y = random.randint(0, HEIGHT-15)
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
-        self.level=level
+        self.level=0
         self.speed = random.randint(1, 5)
         if self.x == 5:
             self.direction = 1
