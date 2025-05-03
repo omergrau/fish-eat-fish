@@ -1,9 +1,10 @@
 # 🐟 fishi 🐠
 
+🎮 **fishi** is a **browser game** developed using <ins>**Python**</ins> and the <ins>**Pygame**</ins> library, and it runs directly in your web browser!
+
+
 [![Fishi Gameplay](https://github.com/omergrau/fish-eat-fish/blob/master/fishi%20game%20gif.gif?raw=true)](https://omergrau.itch.io/fishi)
 
-
-🎮 **fishi** is a **browser game** developed using <ins>**Python**</ins> and the <ins>**Pygame**</ins> library, and it runs directly in your web browser!
 
 ## 🕹️ How to Play
 
