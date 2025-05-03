@@ -1,8 +1,11 @@
-import pygame
-import asyncio
 from extras import Player, Fish,resources
 import os
 import sys
+from extras.resources import *
+import asyncio
+import pygame
+from extras import Player, Fish
+from extras.constants import *
 from extras.resources import *
 
 
@@ -10,12 +13,14 @@ def level_up(player):
     if player.score == 50:
         player.level_up()
 
+
 def toggle_fullscreen(fullscreen,WIDTH,HEIGHT):
     if fullscreen:
         screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
     else:
         screen = pygame.display.set_mode((WIDTH, HEIGHT), )
     return screen
+
 
 """def pause(pause,pause_pressed):
         if pause_pressed not pause:# pause pressed on the first time
@@ -25,6 +30,7 @@ def toggle_fullscreen(fullscreen,WIDTH,HEIGHT):
             pause_pressed = True
         if not keys[pygame.K_p]:
             pause_pressed=False"""
+
 
 def load_high_score():
     highscore=resources.load_resource("highscore.txt")
@@ -36,6 +42,7 @@ def load_high_score():
                 return 0
     else:
         return 0
+
 
 def save_high_score(score):
     with open(resources.load_resource("highscore.txt"), "w") as f:
@@ -53,13 +60,10 @@ async def play_game(running=True,fullscreen=False):
     pygame.mixer.music.load(main_game_music)
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
-    WIDTH = 982
-    HEIGHT = 736
     screen = toggle_fullscreen(fullscreen,WIDTH, HEIGHT,)
     screen.blit(pygame.image.load(ocean_image).convert(), (0, 0))
     pygame.display.set_caption("fish eat fish")
     clock = pygame.time.Clock()
-    FPS = 50
     fishlist = pygame.sprite.Group()
     for _ in range(10):
         fishlist.add(Fish.fish(WIDTH, HEIGHT))
@@ -166,8 +170,11 @@ async def game_over(score, screen,ocean_image,lose_video_game,fullscreen):
         pygame.display.flip()
         await asyncio.sleep(0)
         clock.tick(FPS)
+
+
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()
+
 if __name__ == "__main__":
     game = asyncio.run(play_game(True))

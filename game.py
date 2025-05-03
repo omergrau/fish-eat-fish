@@ -1,12 +1,16 @@
 import asyncio
+
 import pygame
+
 from extras import Player, Fish
+from extras.Player import player
 from extras.constants import *
 from extras.resources import *
 
 
 class game():
     def __init__(self):
+        self.running = None
         self.pause = False
         self.fullscreen = False
         self.pause_pressed = False
@@ -19,6 +23,7 @@ class game():
         self.clock = pygame.time.Clock()
         self.fishlist = pygame.sprite.Group()
         self.players = pygame.sprite.Group()
+        self.lose_sound_playing = False
         self.font = pygame.font.Font(None, 36)
         self.text_color = (255, 255, 255)
 
@@ -27,7 +32,8 @@ class game():
         pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
         pygame.display.set_caption("fish eat fish")
-        player1 = Player.player(WIDTH, HEIGHT, self.sounds["eat"],self.images["my fish left"],self.images["my fish right"])
+        player1: player = Player.player(WIDTH, HEIGHT, self.sounds["eat"], self.images["my fish left"],
+                                        self.images["my fish right"])
         self.players.add(player1)
         for _ in range(10):
             self.fishlist.add(Fish.fish(WIDTH, HEIGHT))
@@ -77,8 +83,11 @@ class game():
                 if event.key == pygame.K_ESCAPE:
                     running = False
                     self.game_mode = "quit"
-                if event.key == pygame.K_p:
-                    self.pausef(event)
+                if event.key == pygame.K_SPACE:
+                    if self.game_mode == "game":
+                        self.pausef(event)
+                    if self.game_mode == "game over":
+                        self.game_mode = "restart"
                 if event.key == pygame.K_f:
                     self.fullscreen = not self.fullscreen
                     self.toggle_fullscreen()
@@ -105,36 +114,41 @@ class game():
         self.update_player()
         self.update_enemies()
         self.update_keyboard_input()
+        self.update_game()
+
+    def game_over_sound(self):
+        pygame.mixer.music.load(self.sounds["lose"])
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play()
+        self.lose_sound_playing = True
 
     async def game(self):
         self.running = True
         self.setup()
         while self.running:
-            self.update_game()
-            if self.game_mode == "game":
-                self.update()
-                self.draw()
-            if self.game_mode == "game over":
-                await self.game_over()
-                self.update_keyboard_input()
-            if self.game_mode == "quit":
-                break
-            self.clock.tick(FPS)
+            self.update_keyboard_input()
+            if not self.pause:
+                if self.game_mode == "game over" or self.game_mode == "restart":
+                    await self.game_over()
+                self.update_game()
+                if self.game_mode == "game":
+                    self.update()
+                    self.draw()
+                if self.game_mode == "quit":
+                    break
+                self.clock.tick(FPS)
             pygame.display.flip()
             await asyncio.sleep(0)
         pygame.quit()
 
     async def game_over(self):
-        self.update_keyboard_input()
-        pygame.mixer.music.load(self.sounds["lose"])
-        pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play()
-        for event in pygame.event.get():
-            if event.type==pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    self.game_mode = "game"
-                    game1.__init__()
-                    await game1.game()
+        if not self.lose_sound_playing:
+            self.game_over_sound()
+        if self.game_mode == "restart":
+            self.lose_sound_playing = False
+            self.game_mode="game"
+            self.__init__()
+            await self.game()
         await asyncio.sleep(0)
 
     def load_game_resources(self):
@@ -150,7 +164,6 @@ class game():
         self.sounds["game music"] = load_resource("../assets/music/game-music-loop.wav")
         self.sounds["lose"] = load_resource("../assets/music/lose_video-game.wav")
         self.sounds["eat"] = load_resource("../assets/music/plastic-crunch.wav")
-
 
 
 if __name__ == "__main__":
