@@ -2,18 +2,16 @@
 
 [![Fishi Gameplay](https://github.com/omergrau/fish-eat-fish/blob/master/fishi%20game%20gif.gif?raw=true)](https://omergrau.itch.io/fishi)
 
-🎮 **fishi** is a **cute browser game** developed using <ins>**Python**</ins> and the <ins>**Pygame**</ins> library, and it runs directly in your web browser! 🚀 Its main purpose is to:
-
-* 🧠 **Develop Thinking Skills**
-* 🏆 **Provide a Challenge**
-* 📚 **Facilitate Learning New Libraries**
-* 🎨 **Foster Creativity**
+🎮 **fishi** is a **cute browser game** developed using <ins>**Python**</ins> and the <ins>**Pygame**</ins> library, and it runs directly in your web browser!
 
 ## 🕹️ How to Play
 
-The game runs directly in your browser, <ins>**with no installation required!**</ins> Simply click on the following link to start playing:
+<p align="center">
+  <a href="https://omergrau.itch.io/fishi" style="display: inline-block; padding: 12px 24px; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; border-radius: 8px; background-color: #5cb85c; color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+    🎮 Play fishi Online Now!
+  </a>
+</p>
 
-[https://omergrau.itch.io/fishi](https://omergrau.itch.io/fishi)
 
 ### 🖱️ Game Instructions:
 
@@ -24,13 +22,13 @@ The game runs directly in your browser, <ins>**with no installation required!**<
 ## 🎯 Development Goals
 
 * 💡 **Develop Thinking Skills:** The game is designed to encourage strategic thinking and quick reactions.
-* 🔥 **Challenge:** Face increasingly difficult waves of fish of different sizes.
+* 🔥 **Provide a Challenge:** Face increasingly difficult waves of fish of different sizes.
 * 👨‍💻 **Learning New Libraries:** This project served as a tool for in-depth learning of the Pygame library and web technologies.
-* ✨ **Foster Creativity:** [If there are creative elements in the game, mention them here].
+* ✨ **Foster Creativity:**.
 
 ## 🤝 Contribution
 
-If you are interested in contributing to the development of the game, you are <ins>**welcome to do so!**</ins> You can contribute in various ways:
+If you are interested in contributing to the development of the game, you are welcome to do so! You can contribute in various ways:
 
 * 🐛 **Bug Reporting:** Open a <ins>**new issue**</ins> with details about the bug.
 * 🤔 **Suggestions for Improvements:** Share your ideas by opening a <ins>**new issue**</ins>.
