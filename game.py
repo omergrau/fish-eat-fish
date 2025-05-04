@@ -69,6 +69,7 @@ class game():
     def draw(self):
         self.fishlist.draw(self.screen)
         self.players.draw(self.screen)
+        self.draw_score()
 
     def pausef(self, event):
         if not self.pause_pressed:
@@ -94,6 +95,27 @@ class game():
             else:
                 self.pause_pressed = False
 
+    def load_high_score(self):
+        highscore = load_resource("highscore.txt")
+        if os.path.exists(highscore):
+            with open(highscore, "r") as f:
+                try:
+                    self.high_score = max(int(f.readline()),self.players.sprites()[0].score)
+                except ValueError:
+                    self.high_score= 0
+        else:
+            self.high_score = 0
+
+    def save_high_score(self):
+        with open(load_resource("highscore.txt"), "w") as f:
+            f.write(str(self.high_score))
+
+    def draw_score(self):
+        score_text = self.font.render(f"score: {self.players.sprites()[0].score}", True, self.text_color)
+        score_rect = score_text.get_rect()
+        score_rect.topleft = ((WIDTH - score_rect.width) // 2, 10)
+        self.screen.blit(score_text, score_rect)
+
     def update_game(self):
         self.screen.blit(pygame.image.load(self.images["ocean"]).convert(), (0, 0))
         if self.game_mode == "quit":
@@ -106,7 +128,7 @@ class game():
             text = self.font.render(f"your best score is {self.high_score}", True, self.text_color)
             score_rect = text.get_rect(center=((WIDTH // 2), 50))
             self.screen.blit(text, score_rect)
-            text = self.font.render(f"press f for full screen or p to pause the game", True, self.text_color)
+            text = self.font.render(f"press f for full screen", True, self.text_color)
             score_rect = text.get_rect(center=((WIDTH // 2), (HEIGHT // 2) + 80))
             self.screen.blit(text, score_rect)
 
@@ -134,6 +156,9 @@ class game():
                 if self.game_mode == "game":
                     self.update()
                     self.draw()
+                if self.game_mode == "game over":
+                    self.load_high_score()
+                    self.save_high_score()
                 if self.game_mode == "quit":
                     break
                 self.clock.tick(FPS)
