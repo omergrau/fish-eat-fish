@@ -1,3 +1,3 @@
 WIDTH = 982
 HEIGHT = 736
-FPS = 50
+FPS = 55

@@ -14,7 +14,7 @@ class fish(pygame.sprite.Sprite):
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
         self.level=0
-        self.speed = random.randint(1, 5)
+        self.speed = random.randint(1, 6)
         if self.x ==-199:
             self.direction = 1
         else:

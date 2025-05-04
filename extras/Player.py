@@ -9,7 +9,7 @@ class player(pygame.sprite.Sprite):
         self.x = WIDTH // 2
         self.y = HEIGHT // 2
         self.score = 0
-        self.speed = 0.25
+        self.speed = 0.3
         self.level = -1
         self.slowdownspeed = 0.5
         self.accelartionx = 0
