@@ -2,3 +2,4 @@
 extras/__pycache__/
 /shelf/
 /workspace.xml
+build/web/
