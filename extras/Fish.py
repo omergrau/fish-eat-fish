@@ -1,7 +1,7 @@
 import pygame
 import random
 from extras import resources
-class fish(pygame.sprite.Sprite):
+class fish(pygame.sprite.Sprite):#enemy fish class
     def __init__(self, WIDTH, HEIGHT):
         super().__init__()
         Rrandomcolor = random.randint(0, 255)
@@ -34,7 +34,7 @@ class fish(pygame.sprite.Sprite):
         colored_image.blit(tint_surface, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
         self.image = colored_image
 
-    def check_borders(self):
+    def check_borders(self):#check if the fish is out of the screen and reset its position
         if self.x < 0:
             self.x = 982
         if self.x > 982:
@@ -44,13 +44,13 @@ class fish(pygame.sprite.Sprite):
         if self.y > 736:
             self.y = 736
 
-    def update(self):
+    def update(self):# update the fish location and check for collision with the game borders
         self.x += self.speed * self.direction
         self.rect.topleft = (self.x, self.y)
 
-    def isdisappear(self):
+    def isdisappear(self):## check if the fish is out of the screen
         if self.x < -200 or self.x > self.WIDTH:
             return True
-    def level_up(self,level):
+    def level_up(self,level):## level up the fish - increase the fish size and score)(not in use)
         self.level += 1
 
